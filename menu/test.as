@@ -25,7 +25,11 @@
         // Play area stuff
         public var playClip:MovieClip;
         public var playMain:MovieClip;
+		
+		public var d2wareTab:MovieClip;
         public var customTabNum:int = 1337;
+
+		public var tabTimer:Timer;
 
         // These vars determain how much of the stage we can use
         // They are updated as the stage size changes
@@ -102,19 +106,50 @@
 
 			customLobby.addEventListener(ButtonEvent.CLICK, onCustomLobbyClicked);
 
+			d2wareTab = new D2WareTab();
+			playMain.addChild(d2wareTab);
+			d2wareTab.x = 160;
+			d2wareTab.y =  2;
+			d2wareTab.visible = false;
+			
 			// Fix issue with tab not existing
 			playMain.Nav["tab"+customTabNum] = {
 				selected: false
 			};
-
+			
+			
+			// Create timer to check if our tab got closed
+			trace("Ok, lets hack ourselves in!");
+			trace(playClip.numNavTabs);
+			var _i_:int = 0;
+			var j:Object = null;
+			while(_i_ < 11) // :O it can be dynamic later
+			{
+				trace(playClip.numNavTabs + "tabs, "+_i_+" have been hacked.");
+				j = playMain.Nav["tab" + _i_];
+				if(j != null) {
+					trace(_i_+" isn't null, yay!");
+			   		playMain.Nav["tab" + _i_].addEventListener(ButtonEvent.CLICK,CloseTab);
+				} else {
+					trace(_i_+" is null, boo!");
+				}
+				_i_++;
+			}
 			// Create chrome window
 			//InitChromeHTMLRenderTarget();
 		}
-
+		public function CloseTab(obj:Object) {
+			trace("a different tab got clicked, abandon ship!");
+			d2wareTab.visible = false;
+		}
 		public function onCustomLobbyClicked(obj:Object) {
 			// Change to correct tab
 			playClip.setCurrentTab(1);
+			trace("a");
 			playClip.setCurrentTab(customTabNum);
+			trace("b");
+			d2wareTab.visible = true;
+			trace("c");
 		}
 
 		public function InitChromeHTMLRenderTarget() : * {
