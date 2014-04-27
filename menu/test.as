@@ -49,7 +49,17 @@
 
 			this.gameAPI.OnReady();
          	Globals.instance.resizeManager.AddListener(this);
-
+			
+			//debug crap. I want glory
+			//trace("Enabling custom games!");
+			//globals.Loader_lobby_settings.movieClip.AllowCustomGames = true;
+			//trace("Making custom setting visible!");
+			//globals.Loader_lobby_settings.movieClip.LobbySettings.custom.visible = true;
+			//trace("huzzah?");
+			//globals.Loader_top_bar.movieClip.internationalTicket.visible = true;
+			//globals.Loader_top_bar.movieClip.Downloads.visible = true;
+			//globals.Loader_top_bar.movieClip.emblem.spectator_client_indicator.visible = true;
+			
          	// Create timer to inject
          	var injectTimer:Timer = new Timer(1000, 1);
             injectTimer.addEventListener(TimerEvent.TIMER, logTest);
@@ -68,16 +78,17 @@
 
 		public function logTest(e:TimerEvent) {
 			trace("Injected by Ash47!\n\n\n");
-
 			trace("Keys:");
 			for(var key in globals) {
 				trace(key);
-
-				if(globals[key].gameAPI) {
-					for(var k2 in globals[key].gameAPI) {
-						trace(k2);
+				try {
+					if(globals[key].gameAPI) {
+						for(var k2 in globals[key].gameAPI) {
+							trace("    "+k2);
+						}
 					}
 				}
+				catch(error:Error) {}
 
 			}
 
@@ -123,18 +134,20 @@
 			trace(playClip.numNavTabs);
 			var _i_:int = 0;
 			var j:Object = null;
-			while(_i_ < 11) // :O it can be dynamic later
+			while(_i_ < 13) // :O it can be dynamic later
 			{
 				trace(playClip.numNavTabs + "tabs, "+_i_+" have been hacked.");
 				j = playMain.Nav["tab" + _i_];
 				if(j != null) {
 					trace(_i_+" isn't null, yay!");
+					trace(_i_+" visibility is "+playMain.Nav["tab" + _i_].visible);
 			   		playMain.Nav["tab" + _i_].addEventListener(ButtonEvent.CLICK,CloseTab);
 				} else {
 					trace(_i_+" is null, boo!");
 				}
 				_i_++;
 			}
+			
 			// Create chrome window
 			//InitChromeHTMLRenderTarget();
 		}
@@ -150,6 +163,19 @@
 			trace("b");
 			d2wareTab.visible = true;
 			trace("c");
+			
+			//For glory, for hackery!!
+			trace("Attempting to open custom lobby...");
+			globals.Loader_lobby_settings.movieClip.initLobbyGameMode(15,0,"Frota",0);
+			globals.Loader_lobby_settings.movieClip.setLocalLobby(false, true);
+			
+			//Science!
+			playMain.Nav["tab6"].visible = true;
+			playMain.Nav["tab11"].visible = true;
+			playMain.Nav["tab12"].visible = true;
+			trace("This might die in a fire, ah well..");
+			playMain.Nav["tab11"].enabled = true;
+			playMain.Nav["tab12"].enabled = true;
 		}
 
 		public function InitChromeHTMLRenderTarget() : * {
